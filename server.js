@@ -1,9 +1,10 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const expect = require('chai');
 const socket = require('socket.io');
 const cors = require('cors');
+const helmet = require('helmet');
+require('dotenv').config();
 
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner.js');
@@ -18,6 +19,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //For FCC testing purposes and enables user to connect from outside the hosting platform
 app.use(cors({origin: '*'})); 
+
+//Use HelmetJS
+app.use(
+  helmet({
+    noSniff: true,
+    xssFilter: true,
+    noCache: true,
+    hidePoweredBy: {
+      setTo: 'PHP 7.4.3'
+    }
+  })
+);
+
+
 
 // Index page (static HTML)
 app.route('/')
